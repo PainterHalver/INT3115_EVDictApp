@@ -2,12 +2,12 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {Buffer} from 'buffer';
 import {Word} from '../types';
-import {populateHtml} from '../utils/helpers';
+import {filterBadChars, populateHtml} from '../utils/helpers';
 
 export type DatabaseContextType = {
   db: SQLite.SQLiteDatabase | null;
   getWord: (word: string) => Promise<Word | undefined>;
-  getWordsStartsWith: (word: string) => Promise<Word[] | undefined>;
+  getWordsStartsWith: (word: string, limit?: number) => Promise<Word[] | undefined>;
 };
 
 // SQLite.DEBUG(true);
@@ -30,7 +30,7 @@ const DatabaseContext = createContext<DatabaseContextType>({
   getWord: async (word: string) => {
     return {} as any;
   },
-  getWordsStartsWith: async (word: string) => {
+  getWordsStartsWith: async (word: string, limit?: number) => {
     return [] as any;
   },
 });
@@ -38,70 +38,64 @@ const DatabaseContext = createContext<DatabaseContextType>({
 export const DatabaseProvider = ({children}: any) => {
   const getWord = async (word: string): Promise<Word | undefined> => {
     try {
-      const result = await new Promise<Word | undefined>(
-        async (resolve, reject) => {
-          await db.transaction(tx => {
-            tx.executeSql(
-              `SELECT * FROM av WHERE word = ? LIMIT 1`,
-              [word],
-              (_, rs) => {
-                if (rs.rows.length > 0) {
-                  try {
-                    const row = rs.rows.item(0);
-                    row.av = new Buffer(row.av, 'base64').toString('utf8');
-                    row.av = populateHtml(row.av);
-                    resolve(row);
-                  } catch (error) {
-                    console.log(error);
-                  }
-                } else {
-                  reject('Không có gì trả về');
+      word = filterBadChars(word);
+      const result = await new Promise<Word | undefined>(async (resolve, reject) => {
+        await db.transaction(tx => {
+          tx.executeSql(
+            `SELECT * FROM av WHERE word = ? LIMIT 1`,
+            [word],
+            (_, rs) => {
+              if (rs.rows.length > 0) {
+                try {
+                  const row = rs.rows.item(0);
+                  row.av = new Buffer(row.av, 'base64').toString('utf8');
+                  row.av = populateHtml(row.av);
+                  resolve(row);
+                } catch (error) {
+                  console.log(error);
                 }
-              },
-              (_, error) => reject(error),
-            );
-          });
-        },
-      );
+              } else {
+                reject('Không có gì trả về');
+              }
+            },
+            (_, error) => reject(error),
+          );
+        });
+      });
       return result;
     } catch (error) {
       console.log('ERROR: ', error);
     }
   };
 
-  const getWordsStartsWith = async (
-    query: string,
-    limit: number = 5,
-  ): Promise<Word[] | undefined> => {
+  const getWordsStartsWith = async (query: string, limit: number = 5): Promise<Word[] | undefined> => {
     try {
-      const result = await new Promise<Word[] | undefined>(
-        async (resolve, reject) => {
-          await db.transaction(tx => {
-            tx.executeSql(
-              `SELECT word, mean, av FROM av WHERE word LIKE ? LIMIT ?`,
-              [query + '%', limit],
-              (_, rs) => {
-                if (rs.rows.length > 0) {
-                  try {
-                    // return all rows after converting to array
-                    const rows = rs.rows.raw();
-                    rows.forEach((row: Word) => {
-                      row.av = new Buffer(row.av, 'base64').toString('utf8');
-                      row.av = populateHtml(row.av);
-                    });
-                    resolve(rows);
-                  } catch (error) {
-                    console.log(error);
-                  }
-                } else {
-                  reject('Không có gì trả về');
+      const result = await new Promise<Word[] | undefined>(async (resolve, reject) => {
+        await db.transaction(tx => {
+          tx.executeSql(
+            `SELECT word, mean, av FROM av WHERE word LIKE ? ORDER BY word ASC LIMIT ?`,
+            [query + '%', limit],
+            (_, rs) => {
+              if (rs.rows.length > 0) {
+                try {
+                  // return all rows after converting to array
+                  const rows = rs.rows.raw();
+                  rows.forEach((row: Word) => {
+                    row.av = new Buffer(row.av, 'base64').toString('utf8');
+                    row.av = populateHtml(row.av);
+                  });
+                  resolve(rows);
+                } catch (error) {
+                  console.log(error);
                 }
-              },
-              (_, error) => reject(error),
-            );
-          });
-        },
-      );
+              } else {
+                reject('Không có gì trả về');
+              }
+            },
+            (_, error) => reject(error),
+          );
+        });
+      });
       return result;
     } catch (error) {
       console.log('ERROR: ', error);

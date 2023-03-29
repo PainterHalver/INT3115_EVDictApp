@@ -71,11 +71,7 @@ const WordDetail = ({navigation, route}: Props) => {
               onPress={() => {
                 navigation.goBack();
               }}>
-              <IoIcon
-                name="arrow-back-outline"
-                size={25}
-                color={COLORS.TEXT_WHITE}
-              />
+              <IoIcon name="arrow-back-outline" size={25} color={COLORS.TEXT_WHITE} />
             </TouchableOpacity>
             <Text
               style={{
@@ -95,19 +91,11 @@ const WordDetail = ({navigation, route}: Props) => {
           </View>
 
           <View style={styles.speakers}>
-            <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={speakUk}>
-              <Text style={{color: COLORS.TEXT_GRAY, fontSize: 16}}>
-                🔊 &nbsp; UK
-              </Text>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={speakUk}>
+              <Text style={{color: COLORS.TEXT_GRAY, fontSize: 16}}>🔊 &nbsp; UK</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={speakUs}>
-              <Text style={{color: COLORS.TEXT_GRAY, fontSize: 16}}>
-                🔊 &nbsp; US
-              </Text>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={speakUs}>
+              <Text style={{color: COLORS.TEXT_GRAY, fontSize: 16}}>🔊 &nbsp; US</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -115,6 +103,14 @@ const WordDetail = ({navigation, route}: Props) => {
           <WebView
             originWhitelist={['*']}
             source={{html: createMarkup(word)}}
+            onMessage={async event => {
+              const {data} = event.nativeEvent;
+              if (data === word?.word) return;
+              const newWord = await getWord(data);
+              if (newWord) {
+                navigation.push('WordDetail', {word: newWord});
+              }
+            }}
           />
         </View>
       </View>

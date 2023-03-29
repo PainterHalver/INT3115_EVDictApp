@@ -48,7 +48,7 @@ const Home = ({navigation}: Props) => {
     }
 
     const timeout = setTimeout(async () => {
-      const result = await getWordsStartsWith(query);
+      const result = await getWordsStartsWith(query, 20);
 
       if (result) {
         setSearchSuggestions(result);
@@ -93,11 +93,7 @@ const Home = ({navigation}: Props) => {
                 gap: 5,
                 position: 'relative',
               }}>
-              <IoIcon
-                name="md-search-sharp"
-                size={25}
-                color={COLORS.TEXT_GRAY}
-              />
+              <IoIcon name="md-search-sharp" size={25} color={COLORS.TEXT_GRAY} />
               <TextInput
                 style={{fontSize: 17, flex: 1}}
                 placeholder="Nhập từ khóa tìm kiếm"
@@ -169,13 +165,8 @@ const Home = ({navigation}: Props) => {
                   borderRadius: 10,
                   alignItems: 'center',
                 }}>
-                <Text style={{fontSize: 20, fontWeight: '500'}}>
-                  Từ của ngày hôm nay
-                </Text>
-                <Text
-                  style={{marginVertical: 20, fontSize: 18, fontWeight: '400'}}>
-                  Challenge
-                </Text>
+                <Text style={{fontSize: 20, fontWeight: '500'}}>Từ của ngày hôm nay</Text>
+                <Text style={{marginVertical: 20, fontSize: 18, fontWeight: '400'}}>Challenge</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
