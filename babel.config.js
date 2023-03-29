@@ -6,7 +6,7 @@ module.exports = function (api) {
   ];
 
   const plugins = [
-
+    'react-native-reanimated/plugin',
   ];
 
   if (isProduction) {
