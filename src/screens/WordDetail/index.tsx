@@ -32,7 +32,7 @@ import {createMarkup} from '../../utils/markup';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
-type Props = StackScreenProps<RootStackParamList>;
+type Props = StackScreenProps<RootStackParamList, 'WordDetail'>;
 const screenWidth = Dimensions.get('window').width;
 
 const WordDetail = ({navigation, route}: Props) => {
@@ -147,11 +147,12 @@ const WordDetail = ({navigation, route}: Props) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              paddingHorizontal: 10,
+              paddingHorizontal: 20,
               marginVertical: 10,
               gap: 10,
             }}>
             <TouchableOpacity
+              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
               onPress={() => {
                 navigation.goBack();
               }}>
@@ -160,16 +161,16 @@ const WordDetail = ({navigation, route}: Props) => {
             <Text
               style={{
                 color: COLORS.TEXT_WHITE,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: '400',
                 marginRight: 'auto',
               }}>
               {word?.word}
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
               <MaterialIcon name="report" size={25} color={COLORS.TEXT_WHITE} />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
               <IoIcon name="star" size={25} color={COLORS.TEXT_WHITE} />
             </TouchableOpacity>
           </View>
@@ -303,7 +304,7 @@ export default WordDetail;
 const styles = StyleSheet.create({
   containerWrapper: {
     flex: 1,
-    backgroundColor: '#f9f9f9', // match voi webview
+    backgroundColor: COLORS.BACKGROUND_WHITE, // match voi webview
   },
   container: {
     flex: 1,
