@@ -24,6 +24,10 @@ import {useDatabase} from '../../contexts/DatabaseContext';
 import {Word} from '../../types';
 import SearchSuggestion from './SearchSuggestion';
 import Card from '../../component/Card';
+import {HistoryIcon} from '../../icons/HistoryIcon';
+import {TranslateTextIcon} from '../../icons/TranslateTextIcon';
+import {SettingsIcon} from '../../icons/SettingsIcon';
+import {HeartIcon} from '../../icons/HeartIcon';
 
 // Prop 1 là prop gần nhất, 2 là của parent
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -64,20 +68,20 @@ const Home = ({navigation}: Props) => {
     };
   }, [query]);
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (query.length > 0 && searchSuggestions.length > 0) {
-        setQuery('');
-        return true;
-      } else {
-        return false;
-      }
-    });
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+  //     if (query.length > 0 && searchSuggestions.length > 0) {
+  //       setQuery('');
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   });
 
-    return () => {
-      backHandler.remove();
-    };
-  }, []);
+  //   return () => {
+  //     backHandler.remove();
+  //   };
+  // }, []);
 
   return (
     <View style={styles.containerWrapper}>
@@ -148,41 +152,45 @@ const Home = ({navigation}: Props) => {
           <View style={styles.function}>
             <TouchableNativeFeedback
               onPress={() => {
-                navigation.navigate('TranslateText', {});
-              }}>
-              <View style={styles.functionButton}>
-                <Text>Icon</Text>
-                <Text style={styles.functionName}>Dịch văn bản</Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-          <View style={styles.function}>
-            <TouchableNativeFeedback
-              onPress={() => {
                 navigation.navigate('History');
               }}>
               <View style={styles.functionButton}>
-                <Text>Icon</Text>
+                <HistoryIcon size={25} color={COLORS.TEXT_BLACK} />
                 <Text style={styles.functionName}>Từ đã tra</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
+
+          <View style={styles.function}>
+            <TouchableNativeFeedback
+              onPress={() => {
+                navigation.navigate('TranslateText', {});
+              }}>
+              <View style={styles.functionButton}>
+                <TranslateTextIcon size={25} color={COLORS.TEXT_BLACK} />
+                <Text style={styles.functionName}>Dịch văn bản</Text>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+
           <View style={styles.function}>
             <TouchableNativeFeedback>
               <View style={styles.functionButton}>
-                <Text>Icon</Text>
+                <HeartIcon size={25} color={COLORS.TEXT_BLACK} />
                 <Text style={styles.functionName}>Từ yêu thích</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
+
           <View style={styles.function}>
             <TouchableNativeFeedback>
               <View style={styles.functionButton}>
-                <Text>Icon</Text>
+                <SettingsIcon size={25} color={COLORS.TEXT_BLACK} />
                 <Text style={styles.functionName}>Cài đặt</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
+
           <View style={styles.function}>
             <TouchableNativeFeedback>
               <View style={styles.functionButton}>
@@ -191,6 +199,7 @@ const Home = ({navigation}: Props) => {
               </View>
             </TouchableNativeFeedback>
           </View>
+
           <View style={styles.dailyWordContainer}>
             <TouchableNativeFeedback>
               <View
