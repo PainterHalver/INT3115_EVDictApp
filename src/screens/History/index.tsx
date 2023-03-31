@@ -139,6 +139,7 @@ const History = ({navigation, route}: Props) => {
               marginBottom: 15,
               borderRadius: 7,
               backgroundColor: COLORS.BACKGROUND_WHITE,
+              elevation: 1,
             }}>
             <ScrollView showsVerticalScrollIndicator={false}>
               {filteredHistory.map((word, index) => {

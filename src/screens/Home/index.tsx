@@ -13,6 +13,7 @@ import {
   View,
   Keyboard,
   ScrollView,
+  BackHandler,
 } from 'react-native';
 import FontawesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -22,6 +23,7 @@ import {COLORS} from '../../constants';
 import {useDatabase} from '../../contexts/DatabaseContext';
 import {Word} from '../../types';
 import SearchSuggestion from './SearchSuggestion';
+import Card from '../../component/Card';
 
 // Prop 1 là prop gần nhất, 2 là của parent
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -61,6 +63,21 @@ const Home = ({navigation}: Props) => {
       clearTimeout(timeout);
     };
   }, [query]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (query.length > 0 && searchSuggestions.length > 0) {
+        setQuery('');
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.containerWrapper}>
@@ -154,7 +171,7 @@ const Home = ({navigation}: Props) => {
             <TouchableNativeFeedback>
               <View style={styles.functionButton}>
                 <Text>Icon</Text>
-                <Text style={styles.functionName}>Function Name</Text>
+                <Text style={styles.functionName}>Từ yêu thích</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
@@ -162,7 +179,7 @@ const Home = ({navigation}: Props) => {
             <TouchableNativeFeedback>
               <View style={styles.functionButton}>
                 <Text>Icon</Text>
-                <Text style={styles.functionName}>Function Name</Text>
+                <Text style={styles.functionName}>Cài đặt</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
@@ -222,7 +239,8 @@ const styles = StyleSheet.create({
   },
   functionButton: {
     flexDirection: 'row',
-    backgroundColor: 'cyan',
+    backgroundColor: COLORS.BACKGROUND_WHITE,
+    elevation: 1,
     padding: 15,
     borderRadius: 7,
     gap: 10,
@@ -231,6 +249,7 @@ const styles = StyleSheet.create({
   functionName: {
     fontSize: 18,
     fontWeight: '400',
+    color: COLORS.TEXT_BLACK,
   },
   dailyWordContainer: {
     // backgroundColor: 'green',
