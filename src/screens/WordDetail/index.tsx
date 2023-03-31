@@ -1,7 +1,7 @@
 // @refresh reset
 
 import {StackScreenProps} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Dimensions,
   LogBox,
@@ -37,8 +37,17 @@ type Props = StackScreenProps<RootStackParamList, 'WordDetail'>;
 const screenWidth = Dimensions.get('window').width;
 
 const WordDetail = ({navigation, route}: Props) => {
-  const {db, getWord} = useDatabase();
+  const {getWord, addHistoryWord} = useDatabase();
   const word = route.params?.word;
+
+  useEffect(() => {
+    // Add word to history
+    (async () => {
+      if (word) {
+        await addHistoryWord(word);
+      }
+    })();
+  }, []);
 
   const speakUk = async () => {
     if (!word) return;
@@ -61,7 +70,8 @@ const WordDetail = ({navigation, route}: Props) => {
     tabs.splice(1);
   } else {
     for (let i = splittedAvHtml.length; i >= 0; i--) {
-      if (!splittedAvHtml[i] || splittedAvHtml[i].startsWith('.')) {
+      // Dont need Technical for now
+      if (!splittedAvHtml[i] || splittedAvHtml[i].startsWith('.') || i === 2) {
         splittedAvHtml.splice(i, 1);
         tabs.splice(i, 1);
       }

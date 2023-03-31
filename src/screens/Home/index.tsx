@@ -27,7 +27,7 @@ import SearchSuggestion from './SearchSuggestion';
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({navigation}: Props) => {
-  const {db, getWord, getWordsStartsWith} = useDatabase();
+  const {getWord, getWordsStartsWith} = useDatabase();
   const [query, setQuery] = React.useState<string>('');
   const [searchSuggestions, setSearchSuggestions] = React.useState<Word[]>([]);
 
@@ -113,7 +113,7 @@ const Home = ({navigation}: Props) => {
                   querySubmitHandler(event.nativeEvent.text);
                 }}
                 autoCapitalize="none"
-                cursorColor={COLORS.BACKGROUND_PRIMARY_DARK}
+                cursorColor={COLORS.BACKGROUND_PRIMARY}
               />
               {query.length > 0 && (
                 <TouchableOpacity
@@ -127,7 +127,7 @@ const Home = ({navigation}: Props) => {
           </View>
         </View>
 
-        <ScrollView style={styles.bodyContainer}>
+        <View style={styles.bodyContainer}>
           <View style={styles.function}>
             <TouchableNativeFeedback
               onPress={() => {
@@ -140,10 +140,13 @@ const Home = ({navigation}: Props) => {
             </TouchableNativeFeedback>
           </View>
           <View style={styles.function}>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={() => {
+                navigation.navigate('History');
+              }}>
               <View style={styles.functionButton}>
                 <Text>Icon</Text>
-                <Text style={styles.functionName}>Function Name</Text>
+                <Text style={styles.functionName}>Từ đã tra</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
@@ -186,7 +189,7 @@ const Home = ({navigation}: Props) => {
             </TouchableNativeFeedback>
           </View>
           <SearchSuggestion searchSuggestions={searchSuggestions} />
-        </ScrollView>
+        </View>
       </View>
     </View>
   );

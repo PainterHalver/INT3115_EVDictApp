@@ -1,21 +1,21 @@
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import React from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-import Home from './src/screens/Home';
 import {DatabaseProvider} from './src/contexts/DatabaseContext';
+import {LoadingModalProvider} from './src/contexts/LoadingModalContext';
+import History from './src/screens/History';
+import Home from './src/screens/Home';
+import TranslateText from './src/screens/TranslateText';
 import WordDetail from './src/screens/WordDetail';
 import {Word} from './src/types';
-import TranslateText from './src/screens/TranslateText';
-import {LoadingModalProvider} from './src/contexts/LoadingModalContext';
 
 export type RootStackParamList = {
   Home: undefined;
   WordDetail: {word: Word};
   TranslateText: {text?: string};
+  History: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -38,6 +38,13 @@ function App(): JSX.Element {
               <Stack.Screen
                 name="TranslateText"
                 component={TranslateText}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                }}
+              />
+              <Stack.Screen
+                name="History"
+                component={History}
                 options={{
                   ...TransitionPresets.SlideFromRightIOS,
                 }}
