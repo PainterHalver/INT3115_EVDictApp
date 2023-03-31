@@ -69,9 +69,9 @@ export const DatabaseProvider = ({children}: any) => {
     }
   };
 
-  const getWordsStartsWith = async (query: string, limit: number = 5): Promise<Word[] | undefined> => {
+  const getWordsStartsWith = async (query: string, limit: number = 5): Promise<Word[]> => {
     try {
-      const result = await new Promise<Word[] | undefined>(async (resolve, reject) => {
+      const result = await new Promise<Word[]>(async (resolve, reject) => {
         await db.transaction(tx => {
           tx.executeSql(
             `SELECT word, mean, av FROM av WHERE word LIKE ? ORDER BY word ASC LIMIT ?`,
@@ -100,6 +100,7 @@ export const DatabaseProvider = ({children}: any) => {
       return result;
     } catch (error) {
       console.log('ERROR: ', error);
+      return [];
     }
   };
 
