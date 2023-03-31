@@ -70,11 +70,15 @@ const WordDetail = ({navigation, route}: Props) => {
     tabs.splice(1);
   } else {
     for (let i = splittedAvHtml.length; i >= 0; i--) {
-      // Dont need Technical for now
-      if (!splittedAvHtml[i] || splittedAvHtml[i].startsWith('.') || i === 2) {
+      if (!splittedAvHtml[i] || splittedAvHtml[i].startsWith('.')) {
         splittedAvHtml.splice(i, 1);
         tabs.splice(i, 1);
       }
+    }
+    // remove technical there are 5 tabs
+    if (tabs.length === 5) {
+      tabs.splice(2, 1);
+      splittedAvHtml.splice(2, 1);
     }
   }
 
