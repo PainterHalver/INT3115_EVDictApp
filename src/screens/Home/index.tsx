@@ -28,6 +28,7 @@ import {HistoryIcon} from '../../icons/HistoryIcon';
 import {TranslateTextIcon} from '../../icons/TranslateTextIcon';
 import {SettingsIcon} from '../../icons/SettingsIcon';
 import {HeartIcon} from '../../icons/HeartIcon';
+import {BookIcon} from '../../icons/BookIcon';
 
 // Prop 1 là prop gần nhất, 2 là của parent
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -174,10 +175,13 @@ const Home = ({navigation}: Props) => {
           </View>
 
           <View style={styles.function}>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={() => {
+                navigation.navigate('YourWord');
+              }}>
               <View style={styles.functionButton}>
-                <HeartIcon size={25} color={COLORS.TEXT_BLACK} />
-                <Text style={styles.functionName}>Từ yêu thích</Text>
+                <BookIcon size={25} color={COLORS.TEXT_BLACK} />
+                <Text style={styles.functionName}>Sổ tay</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
