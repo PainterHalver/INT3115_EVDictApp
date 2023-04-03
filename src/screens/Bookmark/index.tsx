@@ -157,7 +157,7 @@ const Bookmark = ({navigation, route}: Props) => {
                     }}>
                     <View style={{gap: 5, marginRight: 'auto'}}>
                       <Text style={{fontSize: 18, color: COLORS.TEXT_BLACK}}>
-                        {category.name.length > 30 ? category.name.slice(0, 30) + '...' : category.name}
+                        {category.name.length > 24 ? category.name.slice(0, 24) + '...' : category.name}
                       </Text>
                       <Text style={{fontSize: 15, color: COLORS.TEXT_GRAY}}>
                         {category.created_at}・{category.count} từ

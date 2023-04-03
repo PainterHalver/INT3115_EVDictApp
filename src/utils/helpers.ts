@@ -1,3 +1,6 @@
+import {Word} from '../types';
+import {Buffer} from 'buffer';
+
 export const populateHtml = (html: string) => {
   return html
     .replace(/<d1/g, '<div class="')
@@ -18,4 +21,11 @@ export const filterBadChars = (word: string) => {
     .replace(/-(?=[a-zA-Z0-9]+($|\s))/g, ' ')
     .replace(/_/g, ' ')
     .trim();
+};
+
+export const decodeAv = (rows: Word[]) => {
+  rows.forEach((row: Word) => {
+    row.av = new Buffer(row.av, 'base64').toString('utf8');
+    row.av = populateHtml(row.av);
+  });
 };
