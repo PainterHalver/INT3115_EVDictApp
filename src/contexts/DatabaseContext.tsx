@@ -14,7 +14,8 @@ export type DatabaseContextType = {
   deleteCategory: (id: number) => Promise<void>;
   editCategory: (id: number, name: string) => Promise<void>;
   getWordsFromCategory: (id: number) => Promise<Word[]>;
-  addWordToCategory: (word: string, categoryId: number) => Promise<void>;
+  getSelectedCategoryIds: (word: Word) => Promise<number[]>;
+  addWordToCategories: (word: string, categoryIds: number[]) => Promise<void>;
   removeWordFromCategory: (word: string, categoryId: number) => Promise<void>;
 };
 
@@ -31,7 +32,8 @@ const DatabaseContext = createContext<DatabaseContextType>({
   deleteCategory: 0 as any,
   editCategory: 0 as any,
   getWordsFromCategory: 0 as any,
-  addWordToCategory: 0 as any,
+  getSelectedCategoryIds: 0 as any,
+  addWordToCategories: 0 as any,
   removeWordFromCategory: 0 as any,
 });
 
@@ -69,7 +71,7 @@ export const DatabaseProvider = ({children}: any) => {
       // Words in categories
       await db.executeSql(
         `CREATE TABLE IF NOT EXISTS word_categories (
-        word TEXT NOT NULL PRIMARY KEY,
+        word TEXT NOT NULL,
         category_id INTEGER NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (category_id) REFERENCES categories (id)
@@ -147,14 +149,34 @@ export const DatabaseProvider = ({children}: any) => {
     }
   };
 
-  const addWordToCategory = async (word: string, categoryId: number): Promise<void> => {
+  const getSelectedCategoryIds = async (word: Word): Promise<number[]> => {
     try {
       if (!db) throw new Error('App database is not ready');
 
-      await db.executeSql(`INSERT INTO word_categories (word, category_id) VALUES (?, ?)`, [
-        word,
-        categoryId,
-      ]);
+      const rs = await db.executeSql(`SELECT * FROM word_categories WHERE word = ?`, [word.word]);
+      const categories = rs[0].rows.raw();
+      return categories.map((category: any) => category.category_id);
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  };
+
+  const addWordToCategories = async (word: string, categoryIds: number[]): Promise<void> => {
+    try {
+      if (!db) throw new Error('App database is not ready');
+
+      await db.transaction(tx => {
+        // Remove all current categories
+        tx.executeSql(`DELETE FROM word_categories WHERE word = ?`, [word]);
+
+        categoryIds.forEach(categoryId => {
+          tx.executeSql(`INSERT INTO word_categories (word, category_id) VALUES (?, ?)`, [
+            word,
+            categoryId,
+          ]);
+        });
+      });
     } catch (error) {
       console.log(error);
     }
@@ -305,7 +327,8 @@ export const DatabaseProvider = ({children}: any) => {
         deleteCategory,
         editCategory,
         getWordsFromCategory,
-        addWordToCategory,
+        getSelectedCategoryIds,
+        addWordToCategories,
         removeWordFromCategory,
       }}>
       {children}

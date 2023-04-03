@@ -10,8 +10,9 @@ import Home from './src/screens/Home';
 import TranslateText from './src/screens/TranslateText';
 import WordDetail from './src/screens/WordDetail';
 import Bookmark from './src/screens/Bookmark';
-import {Word} from './src/types';
+import {Category, Word} from './src/types';
 import {MenuProvider} from 'react-native-popup-menu';
+import CategoryScreen from './src/screens/Bookmark/CategoryScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   TranslateText: {text?: string};
   History: undefined;
   YourWord: undefined;
+  CategoryScreen: {category: Category};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -56,6 +58,13 @@ function App(): JSX.Element {
                 <Stack.Screen
                   name="YourWord"
                   component={Bookmark}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="CategoryScreen"
+                  component={CategoryScreen}
                   options={{
                     ...TransitionPresets.SlideFromRightIOS,
                   }}
