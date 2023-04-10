@@ -184,7 +184,10 @@ const Home = ({navigation}: Props) => {
           </View>
 
           <View style={styles.function}>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={() => {
+                navigation.navigate('Settings');
+              }}>
               <View style={styles.functionButton}>
                 <SettingsIcon size={25} color={COLORS.TEXT_BLACK} />
                 <Text style={styles.functionName}>Cài đặt</Text>
@@ -222,6 +225,11 @@ const Home = ({navigation}: Props) => {
               </View>
             </TouchableNativeFeedback>
           </View>
+
+          <View style={{marginTop: 'auto', alignItems: 'center', marginBottom: 15}}>
+            <Text style={{fontSize: 15}}>v0.0.5</Text>
+          </View>
+
           <SearchSuggestion searchSuggestions={searchSuggestions} />
         </View>
       </View>
@@ -250,15 +258,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   function: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    marginHorizontal: 15,
+    marginVertical: 10,
+    borderRadius: 7,
+    overflow: 'hidden',
+    elevation: 1,
   },
   functionButton: {
     flexDirection: 'row',
     backgroundColor: COLORS.BACKGROUND_WHITE,
-    elevation: 1,
     padding: 15,
-    borderRadius: 7,
     gap: 10,
     alignItems: 'center',
   },
