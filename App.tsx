@@ -14,8 +14,10 @@ import {Category, Word} from './src/types';
 import {MenuProvider} from 'react-native-popup-menu';
 import CategoryScreen from './src/screens/Bookmark/CategoryScreen';
 import Settings from './src/screens/Settings';
+import SplashScreen from './src/screens/SplashScreen';
 
 export type RootStackParamList = {
+  SpashScreen: undefined;
   Home: undefined;
   WordDetail: {word: Word};
   TranslateText: {text?: string};
@@ -35,6 +37,7 @@ function App(): JSX.Element {
           <LoadingModalProvider>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="SpashScreen" component={SplashScreen} />
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen
                   name="WordDetail"
