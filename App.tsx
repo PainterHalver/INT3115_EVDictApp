@@ -37,7 +37,6 @@ function App(): JSX.Element {
           <LoadingModalProvider>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="SpashScreen" component={SplashScreen} />
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen
                   name="WordDetail"

@@ -15,6 +15,7 @@ import {
   ScrollView,
   BackHandler,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import FontawesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import IoIcon from 'react-native-vector-icons/Ionicons';
@@ -34,10 +35,16 @@ import {BookIcon} from '../../icons/BookIcon';
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({navigation}: Props) => {
-  const {db, getWord, getWordsStartsWith, getTodaysWord} = useDatabase();
+  const {db, initFinished, getWord, getWordsStartsWith, getTodaysWord} = useDatabase();
   const [query, setQuery] = React.useState<string>('');
   const [searchSuggestions, setSearchSuggestions] = React.useState<Word[]>([]);
   const [randomWord, setRandomWord] = React.useState<Word | null>(null);
+
+  useEffect(() => {
+    if (initFinished) {
+      SplashScreen.hide();
+    }
+  }, [initFinished]);
 
   const querySubmitHandler = async (query: string) => {
     try {
@@ -227,7 +234,7 @@ const Home = ({navigation}: Props) => {
           </View>
 
           <View style={{marginTop: 'auto', alignItems: 'center', marginBottom: 15}}>
-            <Text style={{fontSize: 15}}>v0.0.5</Text>
+            <Text style={{fontSize: 15}}>v0.0.8</Text>
           </View>
 
           <SearchSuggestion searchSuggestions={searchSuggestions} />

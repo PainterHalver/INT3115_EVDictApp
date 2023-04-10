@@ -20,6 +20,8 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+    org.devio.rn.splashscreen.SplashScreen.show(this, R.style.SplashScreenTheme, false);
     super.onCreate(null);
   }
 
