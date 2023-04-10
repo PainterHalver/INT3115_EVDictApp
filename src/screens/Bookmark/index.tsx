@@ -53,6 +53,9 @@ const Bookmark = ({navigation, route}: Props) => {
   const addCategoryHandler = async () => {
     try {
       setLoading(true);
+      if (!addCategoryName) {
+        return ToastAndroid.show('Tên danh mục không được để trống!', ToastAndroid.LONG);
+      }
       await addCategory(addCategoryName);
       setCategories(await getCategories());
       setAddModalOpen(false);

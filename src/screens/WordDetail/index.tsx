@@ -32,6 +32,7 @@ import {useDatabase} from '../../contexts/DatabaseContext';
 import {createMarkup} from '../../utils/markup';
 import {Category} from '../../types';
 import CategoryModal from './CategoryModal';
+import ErrorReportModal from './ErrorReportModal';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -42,6 +43,7 @@ const WordDetail = ({navigation, route}: Props) => {
   const {getWord, addHistoryWord, getCategories, getSelectedCategoryIds} = useDatabase();
   const word = route.params?.word;
   const [categories, setCategories] = React.useState<Category[]>([]);
+  const [showErrorReportModal, setShowErrorReportModal] = React.useState<boolean>(false);
   const [showCategoryModal, setShowCategoryModal] = React.useState<boolean>(false);
   const [selectedCategories, setSelectedCategories] = React.useState<number[]>([]);
 
@@ -192,7 +194,11 @@ const WordDetail = ({navigation, route}: Props) => {
               }}>
               {word?.word}
             </Text>
-            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+            <TouchableOpacity
+              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+              onPress={() => {
+                setShowErrorReportModal(true);
+              }}>
               <MaterialIcon name="report" size={25} color={COLORS.TEXT_WHITE} />
             </TouchableOpacity>
             <TouchableOpacity
@@ -354,6 +360,15 @@ const WordDetail = ({navigation, route}: Props) => {
           </Animated.View>
         </PanGestureHandler>
       </View>
+
+      {/* Report Modal */}
+      <ErrorReportModal
+        visible={showErrorReportModal}
+        onDismiss={() => {
+          setShowErrorReportModal(false);
+        }}
+        word={word}
+      />
 
       {/* Category Modal */}
       <CategoryModal
