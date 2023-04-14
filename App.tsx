@@ -14,7 +14,6 @@ import {Category, Word} from './src/types';
 import {MenuProvider} from 'react-native-popup-menu';
 import CategoryScreen from './src/screens/Bookmark/CategoryScreen';
 import Settings from './src/screens/Settings';
-import SplashScreen from './src/screens/SplashScreen';
 
 export type RootStackParamList = {
   SpashScreen: undefined;
@@ -28,6 +27,7 @@ export type RootStackParamList = {
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
+// const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
   return (
