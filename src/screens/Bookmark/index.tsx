@@ -24,6 +24,8 @@ import {EditIcon} from '../../icons/EditIcon';
 import {PlusIcon} from '../../icons/PlusIcon';
 import {TrashIcon} from '../../icons/TrashIcon';
 import {Category} from '../../types';
+import {AddCategoryModal} from './AddCategoryModal';
+import {EditCategoryModal} from './EditCategoryModal';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -36,8 +38,6 @@ const Bookmark = ({navigation, route}: Props) => {
   const [addModalOpen, setAddModalOpen] = React.useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
-  const [addCategoryName, setAddCategoryName] = React.useState<string>('');
-  const [editCategoryName, setEditCategoryName] = React.useState<string>('');
   const [selectedCategory, setSelectedCategory] = React.useState<Category>();
 
   useEffect(() => {
@@ -50,25 +50,6 @@ const Bookmark = ({navigation, route}: Props) => {
     })();
   }, []);
 
-  const addCategoryHandler = async () => {
-    try {
-      setLoading(true);
-      if (!addCategoryName) {
-        return ToastAndroid.show('Tên danh mục không được để trống!', ToastAndroid.LONG);
-      }
-      await addCategory(addCategoryName);
-      setCategories(await getCategories());
-      setAddModalOpen(false);
-      setAddCategoryName('');
-      ToastAndroid.show('Thêm thành công', ToastAndroid.LONG);
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Đã có lỗi xảy ra, xin vui lòng thử lại sau', ToastAndroid.LONG);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const deleteCategoryHandler = async () => {
     try {
       setLoading(true);
@@ -76,21 +57,6 @@ const Bookmark = ({navigation, route}: Props) => {
       setCategories(await getCategories());
       setDeleteModalOpen(false);
       ToastAndroid.show('Xóa thành công', ToastAndroid.LONG);
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Đã có lỗi xảy ra, xin vui lòng thử lại sau', ToastAndroid.LONG);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const editCategoryHandler = async () => {
-    try {
-      setLoading(true);
-      await editCategory(selectedCategory!.id, editCategoryName);
-      setCategories(await getCategories());
-      setEditModalOpen(false);
-      ToastAndroid.show('Sửa thành công', ToastAndroid.LONG);
     } catch (error) {
       console.log(error);
       ToastAndroid.show('Đã có lỗi xảy ra, xin vui lòng thử lại sau', ToastAndroid.LONG);
@@ -199,59 +165,11 @@ const Bookmark = ({navigation, route}: Props) => {
       </View>
 
       {/* Add category model */}
-      <MyModal visible={addModalOpen} onDismiss={() => setAddModalOpen(false)}>
-        <View style={styles.modal}>
-          <Text style={{color: COLORS.TEXT_BLACK, fontSize: 18, fontWeight: '500'}}>
-            Tạo danh sách từ mới:
-          </Text>
-          <TextInput
-            style={{
-              backgroundColor: COLORS.BACKGROUND_WHITE_DARK,
-              height: 40,
-              borderRadius: 7,
-              paddingHorizontal: 10,
-            }}
-            placeholder={'Tên danh sách'}
-            value={addCategoryName}
-            onChangeText={setAddCategoryName}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: -15,
-              marginTop: 5,
-            }}>
-            <TouchableHighlight
-              style={{flex: 1, borderBottomLeftRadius: 7}}
-              onPress={() => setAddModalOpen(false)}>
-              <View
-                style={{
-                  backgroundColor: COLORS.BACKGROUND_CANCEL_BUTTON,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingVertical: 10,
-                  borderBottomLeftRadius: 7,
-                }}>
-                <Text style={{color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400'}}>Hủy</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={{flex: 1, borderBottomRightRadius: 7}}
-              onPress={addCategoryHandler}>
-              <View
-                style={{
-                  backgroundColor: COLORS.BACKGROUND_PRIMARY,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingVertical: 10,
-                  borderBottomRightRadius: 7,
-                }}>
-                <Text style={{color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400'}}>Tạo</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </MyModal>
+      <AddCategoryModal
+        visible={addModalOpen}
+        onDismiss={() => setAddModalOpen(false)}
+        setCategories={setCategories}
+      />
 
       {/* Delete confirm modal */}
       <MyModal visible={deleteModalOpen} onDismiss={() => setDeleteModalOpen(false)}>
@@ -299,70 +217,12 @@ const Bookmark = ({navigation, route}: Props) => {
       </MyModal>
 
       {/* Edit category model */}
-      <MyModal
+      <EditCategoryModal
         visible={editModalOpen}
-        onDismiss={() => {
-          setEditCategoryName('');
-          setEditModalOpen(false);
-        }}>
-        <View style={styles.modal}>
-          <Text style={{color: COLORS.TEXT_BLACK, fontSize: 18, fontWeight: '500'}}>
-            Cập nhật danh sách:{' '}
-            {selectedCategory && selectedCategory.name.length > 10
-              ? selectedCategory?.name.slice(0, 10) + '...'
-              : selectedCategory?.name}
-          </Text>
-          <TextInput
-            style={{
-              backgroundColor: COLORS.BACKGROUND_WHITE_DARK,
-              height: 40,
-              borderRadius: 7,
-              paddingHorizontal: 10,
-            }}
-            placeholder={'Tên danh sách'}
-            value={editCategoryName}
-            onChangeText={setEditCategoryName}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: -15,
-              marginTop: 5,
-            }}>
-            <TouchableHighlight
-              style={{flex: 1, borderBottomLeftRadius: 7}}
-              onPress={() => {
-                setEditCategoryName('');
-                setEditModalOpen(false);
-              }}>
-              <View
-                style={{
-                  backgroundColor: COLORS.BACKGROUND_CANCEL_BUTTON,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingVertical: 10,
-                  borderBottomLeftRadius: 7,
-                }}>
-                <Text style={{color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400'}}>Hủy</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={{flex: 1, borderBottomRightRadius: 7}}
-              onPress={editCategoryHandler}>
-              <View
-                style={{
-                  backgroundColor: COLORS.BACKGROUND_PRIMARY,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingVertical: 10,
-                  borderBottomRightRadius: 7,
-                }}>
-                <Text style={{color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400'}}>Sửa</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </MyModal>
+        onDismiss={() => setEditModalOpen(false)}
+        setCategories={setCategories}
+        selectedCategory={selectedCategory}
+      />
     </View>
   );
 };

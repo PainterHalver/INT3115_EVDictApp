@@ -30,7 +30,7 @@ import {TranslateTextIcon} from '../../icons/TranslateTextIcon';
 import {SettingsIcon} from '../../icons/SettingsIcon';
 import {HeartIcon} from '../../icons/HeartIcon';
 import {BookIcon} from '../../icons/BookIcon';
-import { useSettings } from '../../contexts/SettingsContext';
+import {useSettings} from '../../contexts/SettingsContext';
 
 // Prop 1 là prop gần nhất, 2 là của parent
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -236,7 +236,7 @@ const Home = ({navigation}: Props) => {
           </View>
 
           <View style={{marginTop: 'auto', alignItems: 'center', marginBottom: 15}}>
-            <Text style={{fontSize: 15}}>v0.0.8</Text>
+            <Text style={{fontSize: 15}}>v0.0.9</Text>
           </View>
 
           <SearchSuggestion searchSuggestions={searchSuggestions} />
