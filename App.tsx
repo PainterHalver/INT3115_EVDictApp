@@ -14,6 +14,7 @@ import {Category, Word} from './src/types';
 import {MenuProvider} from 'react-native-popup-menu';
 import CategoryScreen from './src/screens/Bookmark/CategoryScreen';
 import Settings from './src/screens/Settings';
+import {SettingsProvider} from './src/contexts/SettingsContext';
 
 export type RootStackParamList = {
   SpashScreen: undefined;
@@ -34,55 +35,57 @@ function App(): JSX.Element {
     <SafeAreaProvider>
       <MenuProvider backHandler={true}>
         <DatabaseProvider>
-          <LoadingModalProvider>
-            <NavigationContainer>
-              <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen
-                  name="WordDetail"
-                  component={WordDetail}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="TranslateText"
-                  component={TranslateText}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="History"
-                  component={History}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="YourWord"
-                  component={Bookmark}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="CategoryScreen"
-                  component={CategoryScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="Settings"
-                  component={Settings}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </LoadingModalProvider>
+          <SettingsProvider>
+            <LoadingModalProvider>
+              <NavigationContainer>
+                <Stack.Navigator screenOptions={{headerShown: false}}>
+                  <Stack.Screen name="Home" component={Home} />
+                  <Stack.Screen
+                    name="WordDetail"
+                    component={WordDetail}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="TranslateText"
+                    component={TranslateText}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="History"
+                    component={History}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="YourWord"
+                    component={Bookmark}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="CategoryScreen"
+                    component={CategoryScreen}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Settings"
+                    component={Settings}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </LoadingModalProvider>
+          </SettingsProvider>
         </DatabaseProvider>
       </MenuProvider>
     </SafeAreaProvider>

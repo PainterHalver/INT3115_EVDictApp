@@ -1,9 +1,10 @@
 // @refresh reset
 
 import {StackScreenProps} from '@react-navigation/stack';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useLayoutEffect, useMemo} from 'react';
 import {
   Dimensions,
+  InteractionManager,
   LogBox,
   Platform,
   StatusBar,
@@ -33,6 +34,7 @@ import {createMarkup} from '../../utils/markup';
 import {Category} from '../../types';
 import CategoryModal from './CategoryModal';
 import ErrorReportModal from './ErrorReportModal';
+import {useSettings} from '../../contexts/SettingsContext';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -41,6 +43,7 @@ const screenWidth = Dimensions.get('window').width;
 
 const WordDetail = ({navigation, route}: Props) => {
   const {getWord, addHistoryWord, getCategories, getSelectedCategoryIds} = useDatabase();
+  const {settings} = useSettings();
   const word = route.params?.word;
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [showErrorReportModal, setShowErrorReportModal] = React.useState<boolean>(false);
@@ -48,7 +51,7 @@ const WordDetail = ({navigation, route}: Props) => {
   const [selectedCategories, setSelectedCategories] = React.useState<number[]>([]);
 
   useEffect(() => {
-    (async () => {
+    InteractionManager.runAfterInteractions(async () => {
       try {
         if (word) {
           await addHistoryWord(word);
@@ -59,8 +62,13 @@ const WordDetail = ({navigation, route}: Props) => {
       } catch (error) {
         console.log(error);
       }
-    })();
+    });
+
+    if (settings.shouldAutoPronounce.value) {
+      speakUs();
+    }
   }, []);
+
   const speakUk = async () => {
     if (!word) return;
     await Tts.stop();
