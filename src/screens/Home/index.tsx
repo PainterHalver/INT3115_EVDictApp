@@ -236,7 +236,7 @@ const Home = ({navigation}: Props) => {
           </View>
 
           <View style={{marginTop: 'auto', alignItems: 'center', marginBottom: 15}}>
-            <Text style={{fontSize: 15}}>v0.0.9</Text>
+            <Text style={{fontSize: 15}}>v0.0.10</Text>
           </View>
 
           <SearchSuggestion searchSuggestions={searchSuggestions} />
