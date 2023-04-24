@@ -27,6 +27,7 @@ import {useLoadingModal} from '../../../contexts/LoadingModalContext';
 import {Word} from '../../../types';
 import CheckBox from '@react-native-community/checkbox';
 import MyModal from '../../../component/MyModal';
+import {useSettings} from '../../../contexts/SettingsContext';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -41,6 +42,7 @@ const CategoryScreen = ({navigation, route}: Props) => {
   const category = route.params?.category;
   const [selectedWords, setSelectedWords] = React.useState<Word[]>([]);
   const [comfirmDeleteModalOpen, setComfirmDeleteModalOpen] = React.useState<boolean>(false);
+  const {defaultPronunciation} = useSettings();
 
   const loadWords = async () => {
     try {
@@ -60,7 +62,7 @@ const CategoryScreen = ({navigation, route}: Props) => {
     try {
       if (!text) return;
       await Tts.stop();
-      await Tts.setDefaultVoice('en-GB-language');
+      await Tts.setDefaultVoice(defaultPronunciation === 'UK' ? 'en-GB-language' : 'en-US-language');
       Tts.speak(text);
     } catch (error) {
       console.log(error);

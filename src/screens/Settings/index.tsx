@@ -14,14 +14,15 @@ import IoIcon from 'react-native-vector-icons/Ionicons';
 import {RootStackParamList} from '../../../App';
 import {COLORS} from '../../constants';
 import CheckBox from '@react-native-community/checkbox';
-import {Settings as SettingsType, useSettings} from '../../contexts/SettingsContext';
+import {BooleanSettings as SettingsType, useSettings} from '../../contexts/SettingsContext';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 type Props = StackScreenProps<RootStackParamList, 'Settings'>;
 
 const Settings = ({navigation, route}: Props) => {
-  const {settings, updateSettings} = useSettings();
+  const {booleanSettings, updateBooleanSettings, defaultPronunciation, setDefaultPronunciation} =
+    useSettings();
 
   return (
     <View style={styles.containerWrapper}>
@@ -62,15 +63,15 @@ const Settings = ({navigation, route}: Props) => {
 
         <View style={styles.bodyContainer}>
           <View style={styles.settingsContainer}>
-            {Object.keys(settings).map((key, index) => {
+            {Object.keys(booleanSettings).map((key, index) => {
               const [isSelected, setIsSelected] = useState<boolean>(
-                Object.values(settings)[index].value,
+                Object.values(booleanSettings)[index].value,
               );
               const toggleSelection = () => {
                 setIsSelected(!isSelected);
-                updateSettings({
-                  ...settings,
-                  [key]: {...settings[key as keyof SettingsType], value: !isSelected},
+                updateBooleanSettings({
+                  ...booleanSettings,
+                  [key]: {...booleanSettings[key as keyof SettingsType], value: !isSelected},
                 });
               };
 
@@ -80,15 +81,45 @@ const Settings = ({navigation, route}: Props) => {
                     <View
                       style={[
                         styles.settingContent,
-                        {borderBottomWidth: index === Object.keys(settings).length - 1 ? 0 : 0.7},
+                        {borderBottomWidth: index === Object.keys(booleanSettings).length - 1 ? 0 : 0.7},
                       ]}>
+                      <Text style={[styles.settingText, {marginRight: 'auto'}]}>
+                        {Object.values(booleanSettings)[index].label}
+                      </Text>
                       <CheckBox value={isSelected} onValueChange={toggleSelection} />
-                      <Text style={styles.settingText}>{Object.values(settings)[index].label}</Text>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
               );
             })}
+          </View>
+
+          <View style={styles.settingsContainer}>
+            <View
+              style={[
+                {
+                  paddingVertical: 15,
+                  paddingHorizontal: 15,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 5,
+                },
+              ]}>
+              <View style={{marginRight: 'auto'}}>
+                <Text style={styles.settingText}>Phát âm mặc định</Text>
+              </View>
+              <CheckBox
+                value={defaultPronunciation === 'UK'}
+                onValueChange={() => setDefaultPronunciation('UK')}
+              />
+              <Text style={styles.settingText}>UK</Text>
+
+              <CheckBox
+                value={defaultPronunciation === 'US'}
+                onValueChange={() => setDefaultPronunciation('US')}
+              />
+              <Text style={styles.settingText}>US</Text>
+            </View>
           </View>
 
           <View style={styles.settingsContainer}>

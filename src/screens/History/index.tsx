@@ -25,6 +25,7 @@ import {COLORS} from '../../constants';
 import {useDatabase} from '../../contexts/DatabaseContext';
 import {useLoadingModal} from '../../contexts/LoadingModalContext';
 import {Word} from '../../types';
+import {useSettings} from '../../contexts/SettingsContext';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -36,12 +37,13 @@ const History = ({navigation, route}: Props) => {
   const [query, setQuery] = React.useState<string>('');
   const [history, setHistory] = React.useState<Word[]>([]);
   const [filteredHistory, setFilteredHistory] = React.useState<Word[]>([]);
+  const {defaultPronunciation} = useSettings();
 
   const speak = async (text: string) => {
     try {
       if (!text) return;
       await Tts.stop();
-      await Tts.setDefaultVoice('en-GB-language');
+      await Tts.setDefaultVoice(defaultPronunciation === 'UK' ? 'en-GB-language' : 'en-US-language');
       Tts.speak(text);
     } catch (error) {
       console.log(error);
