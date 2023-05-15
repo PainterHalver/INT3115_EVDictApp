@@ -1,6 +1,6 @@
-import {validatePathConfig} from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
+import { validatePathConfig } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { useEffect } from 'react';
 import {
   Button,
   Platform,
@@ -17,27 +17,27 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import FontawesomeIcon from 'react-native-vector-icons/FontAwesome';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import IoIcon from 'react-native-vector-icons/Ionicons';
-import {RootStackParamList} from '../../../App';
-import {COLORS} from '../../constants';
-import {useDatabase} from '../../contexts/DatabaseContext';
-import {Word} from '../../types';
+import { RootStackParamList } from '../../../App';
+import { COLORS } from '../../constants';
+import { useDatabase } from '../../contexts/DatabaseContext';
+import { Word } from '../../types';
 import SearchSuggestion from './SearchSuggestion';
 import Card from '../../component/Card';
-import {HistoryIcon} from '../../icons/HistoryIcon';
-import {TranslateTextIcon} from '../../icons/TranslateTextIcon';
-import {SettingsIcon} from '../../icons/SettingsIcon';
-import {HeartIcon} from '../../icons/HeartIcon';
-import {BookIcon} from '../../icons/BookIcon';
-import {useSettings} from '../../contexts/SettingsContext';
+import { HistoryIcon } from '../../icons/HistoryIcon';
+import { TranslateTextIcon } from '../../icons/TranslateTextIcon';
+import { SettingsIcon } from '../../icons/SettingsIcon';
+import { HeartIcon } from '../../icons/HeartIcon';
+import { BookIcon } from '../../icons/BookIcon';
+import { useSettings } from '../../contexts/SettingsContext';
 
 // Prop 1 là prop gần nhất, 2 là của parent
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
 
-const Home = ({navigation}: Props) => {
-  const {db, initFinished, getWord, getWordsStartsWith, getTodaysWord} = useDatabase();
-  const {finishedLoading} = useSettings();
+const Home = ({ navigation }: Props) => {
+  const { db, initFinished, getWord, getWordsStartsWith, getTodaysWord } = useDatabase();
+  const { finishedLoading } = useSettings();
   const [query, setQuery] = React.useState<string>('');
   const [searchSuggestions, setSearchSuggestions] = React.useState<Word[]>([]);
   const [randomWord, setRandomWord] = React.useState<Word | null>(null);
@@ -52,7 +52,7 @@ const Home = ({navigation}: Props) => {
     try {
       const result = await getWord(query);
       if (result) {
-        navigation.navigate('WordDetail', {word: result});
+        navigation.navigate('WordDetail', { word: result });
       } else {
         // TODO: Redirect to translate screen
       }
@@ -133,7 +133,7 @@ const Home = ({navigation}: Props) => {
               }}>
               <IoIcon name="md-search-sharp" size={25} color={COLORS.TEXT_GRAY} />
               <TextInput
-                style={{fontSize: 17, flex: 1}}
+                style={{ fontSize: 17, flex: 1 }}
                 placeholder="Nhập từ khóa tìm kiếm"
                 value={query}
                 onChangeText={setQuery}
@@ -208,7 +208,7 @@ const Home = ({navigation}: Props) => {
             <TouchableNativeFeedback
               onPress={() => {
                 if (randomWord) {
-                  navigation.navigate('WordDetail', {word: randomWord});
+                  navigation.navigate('WordDetail', { word: randomWord });
                 }
               }}>
               <View
@@ -219,7 +219,7 @@ const Home = ({navigation}: Props) => {
                   backgroundColor: COLORS.BACKGROUND_WHITE,
                   elevation: 1,
                 }}>
-                <Text style={{fontSize: 20, fontWeight: '500', color: COLORS.TEXT_BLACK}}>
+                <Text style={{ fontSize: 20, fontWeight: '500', color: COLORS.TEXT_BLACK }}>
                   Từ của ngày hôm nay
                 </Text>
                 <Text
@@ -235,8 +235,8 @@ const Home = ({navigation}: Props) => {
             </TouchableNativeFeedback>
           </View>
 
-          <View style={{marginTop: 'auto', alignItems: 'center', marginBottom: 15}}>
-            <Text style={{fontSize: 15}}>v0.0.10</Text>
+          <View style={{ marginTop: 'auto', alignItems: 'center', marginBottom: 15 }}>
+            <Text style={{ fontSize: 15 }}>v0.0.11</Text>
           </View>
 
           <SearchSuggestion searchSuggestions={searchSuggestions} />
@@ -263,7 +263,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
-    // backgroundColor: '#123654',
     paddingVertical: 10,
   },
   function: {

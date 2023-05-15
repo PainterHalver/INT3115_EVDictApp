@@ -1,28 +1,32 @@
-import {StackScreenProps} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { useState } from 'react';
 import {
+  Alert,
   LogBox,
   Platform,
   StatusBar,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
 } from 'react-native';
 import IoIcon from 'react-native-vector-icons/Ionicons';
-import {RootStackParamList} from '../../../App';
-import {COLORS} from '../../constants';
+import { RootStackParamList } from '../../../App';
+import { COLORS } from '../../constants';
 import CheckBox from '@react-native-community/checkbox';
-import {BooleanSettings as SettingsType, useSettings} from '../../contexts/SettingsContext';
+import { BooleanSettings as SettingsType, useSettings } from '../../contexts/SettingsContext';
+import ReportModal from './ReportModal';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 type Props = StackScreenProps<RootStackParamList, 'Settings'>;
 
-const Settings = ({navigation, route}: Props) => {
-  const {booleanSettings, updateBooleanSettings, defaultPronunciation, setDefaultPronunciation} =
+const Settings = ({ navigation, route }: Props) => {
+  const { booleanSettings, updateBooleanSettings, defaultPronunciation, setDefaultPronunciation } =
     useSettings();
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
 
   return (
     <View style={styles.containerWrapper}>
@@ -43,7 +47,7 @@ const Settings = ({navigation, route}: Props) => {
               gap: 10,
             }}>
             <TouchableOpacity
-              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               onPress={() => {
                 navigation.goBack();
               }}>
@@ -71,7 +75,7 @@ const Settings = ({navigation, route}: Props) => {
                 setIsSelected(!isSelected);
                 updateBooleanSettings({
                   ...booleanSettings,
-                  [key]: {...booleanSettings[key as keyof SettingsType], value: !isSelected},
+                  [key]: { ...booleanSettings[key as keyof SettingsType], value: !isSelected },
                 });
               };
 
@@ -81,9 +85,9 @@ const Settings = ({navigation, route}: Props) => {
                     <View
                       style={[
                         styles.settingContent,
-                        {borderBottomWidth: index === Object.keys(booleanSettings).length - 1 ? 0 : 0.7},
+                        { borderBottomWidth: index === Object.keys(booleanSettings).length - 1 ? 0 : 0.7 },
                       ]}>
-                      <Text style={[styles.settingText, {marginRight: 'auto'}]}>
+                      <Text style={[styles.settingText, { marginRight: 'auto' }]}>
                         {Object.values(booleanSettings)[index].label}
                       </Text>
                       <CheckBox value={isSelected} onValueChange={toggleSelection} />
@@ -105,7 +109,7 @@ const Settings = ({navigation, route}: Props) => {
                   gap: 5,
                 },
               ]}>
-              <View style={{marginRight: 'auto'}}>
+              <View style={{ marginRight: 'auto' }}>
                 <Text style={styles.settingText}>Phát âm mặc định</Text>
               </View>
               <CheckBox
@@ -123,21 +127,36 @@ const Settings = ({navigation, route}: Props) => {
           </View>
 
           <View style={styles.settingsContainer}>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={() => setShowReportModal(true)}>
               <View style={styles.settingContainer}>
-                <View style={[styles.settingContent, {borderBottomWidth: 0.7}]}>
+                <View style={[styles.settingContent, { borderBottomWidth: 0.7 }]}>
                   <Text style={styles.settingText}>Báo lỗi hoặc gợi ý</Text>
                 </View>
               </View>
             </TouchableNativeFeedback>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={() => {
+              Alert.alert('Liên hệ', 'Nhóm 6 - 2223II_INT3115_1', [
+                {
+                  text: 'OK',
+                  onPress: () => { },
+                },
+              ]);
+            }}>
               <View style={styles.settingContainer}>
-                <View style={[styles.settingContent, {borderBottomWidth: 0.7}]}>
+                <View style={[styles.settingContent, { borderBottomWidth: 0.7 }]}>
                   <Text style={styles.settingText}>Liên hệ</Text>
                 </View>
               </View>
             </TouchableNativeFeedback>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={() => {
+              Alert.alert('Về chúng tôi', `Nhóm 6 - 2223II_INT3115_1:\n\t- Nguyễn Đức Anh: 20020095\n\t- Đào Đức Hiệp: 20020259\n\t- Lê Văn Hòa: 20020406\n\t- Đỗ Thành Đạt: 20020045
+              `, [
+                {
+                  text: 'OK',
+                  onPress: () => { },
+                },
+              ]);
+            }}>
               <View style={styles.settingContainer}>
                 <View style={[styles.settingContent]}>
                   <Text style={styles.settingText}>Về chúng tôi</Text>
@@ -147,6 +166,13 @@ const Settings = ({navigation, route}: Props) => {
           </View>
         </View>
       </View>
+
+      <ReportModal
+        visible={showReportModal}
+        onDismiss={() => {
+          setShowReportModal(false);
+        }}
+      />
     </View>
   );
 };
@@ -189,5 +215,5 @@ const styles = StyleSheet.create({
     gap: 5,
     borderBottomColor: COLORS.BACKGROUND_PRIMARY,
   },
-  settingText: {color: COLORS.TEXT_BLACK, fontSize: 17, fontWeight: '300'},
+  settingText: { color: COLORS.TEXT_BLACK, fontSize: 17, fontWeight: '300' },
 });

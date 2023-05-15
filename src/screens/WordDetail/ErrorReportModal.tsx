@@ -1,8 +1,8 @@
-import {View, TextInput, TouchableHighlight, Text, StyleSheet, ToastAndroid} from 'react-native';
+import { View, TextInput, TouchableHighlight, Text, StyleSheet, ToastAndroid } from 'react-native';
 import MyModal from '../../component/MyModal';
-import {COLORS} from '../../constants';
-import {Word} from '../../types';
-import {useState} from 'react';
+import { COLORS } from '../../constants';
+import { Word } from '../../types';
+import { useState } from 'react';
 
 interface Props {
   visible: boolean;
@@ -10,7 +10,7 @@ interface Props {
   word: Word;
 }
 
-const ErrorReportModal = ({visible, onDismiss, word}: Props) => {
+const ErrorReportModal = ({ visible, onDismiss, word }: Props) => {
   const [errorReportText, setErrorReportText] = useState<string>('');
 
   const dismissClearText = () => {
@@ -21,7 +21,7 @@ const ErrorReportModal = ({visible, onDismiss, word}: Props) => {
   return (
     <MyModal visible={visible} onDismiss={dismissClearText}>
       <View style={styles.modal}>
-        <Text style={{color: COLORS.TEXT_BLACK, fontSize: 18, fontWeight: '500'}}>
+        <Text style={{ color: COLORS.TEXT_BLACK, fontSize: 18, fontWeight: '500' }}>
           Báo cáo từ: {word && word.word.length > 10 ? word.word.slice(0, 10) + '...' : word.word}
         </Text>
         <TextInput
@@ -44,7 +44,7 @@ const ErrorReportModal = ({visible, onDismiss, word}: Props) => {
             marginHorizontal: -15,
             marginTop: 5,
           }}>
-          <TouchableHighlight style={{flex: 1, borderBottomLeftRadius: 7}} onPress={dismissClearText}>
+          <TouchableHighlight style={{ flex: 1, borderBottomLeftRadius: 7 }} onPress={dismissClearText}>
             <View
               style={{
                 backgroundColor: COLORS.BACKGROUND_CANCEL_BUTTON,
@@ -53,11 +53,11 @@ const ErrorReportModal = ({visible, onDismiss, word}: Props) => {
                 paddingVertical: 10,
                 borderBottomLeftRadius: 7,
               }}>
-              <Text style={{color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400'}}>Hủy</Text>
+              <Text style={{ color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400' }}>Hủy</Text>
             </View>
           </TouchableHighlight>
           <TouchableHighlight
-            style={{flex: 1, borderBottomRightRadius: 7}}
+            style={{ flex: 1, borderBottomRightRadius: 7 }}
             onPress={() => {
               ToastAndroid.show('Cảm ơn bạn đã gửi báo cáo lỗi!', ToastAndroid.SHORT);
               dismissClearText();
@@ -70,7 +70,7 @@ const ErrorReportModal = ({visible, onDismiss, word}: Props) => {
                 paddingVertical: 10,
                 borderBottomRightRadius: 7,
               }}>
-              <Text style={{color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400'}}>Sửa</Text>
+              <Text style={{ color: COLORS.TEXT_WHITE, fontSize: 16, fontWeight: '400' }}>Gửi</Text>
             </View>
           </TouchableHighlight>
         </View>

@@ -1,7 +1,7 @@
 // @refresh reset
 
-import {StackScreenProps} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { useEffect } from 'react';
 import {
   Dimensions,
   LogBox,
@@ -20,13 +20,13 @@ import {
 } from 'react-native';
 import IoIcon from 'react-native-vector-icons/Ionicons';
 import OctIcon from 'react-native-vector-icons/Octicons';
-import {RootStackParamList} from '../../../App';
-import {COLORS} from '../../constants';
-import {Shadow} from 'react-native-shadow-2';
+import { RootStackParamList } from '../../../App';
+import { COLORS } from '../../constants';
+import { Shadow } from 'react-native-shadow-2';
 import Card from '../../component/Card';
 import Tts from 'react-native-tts';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useLoadingModal} from '../../contexts/LoadingModalContext';
+import { useLoadingModal } from '../../contexts/LoadingModalContext';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -42,8 +42,8 @@ const MAP: Translation = {
   en: 'Tiếng Anh',
 };
 
-const TranslateText = ({navigation, route}: Props) => {
-  const {setLoading} = useLoadingModal();
+const TranslateText = ({ navigation, route }: Props) => {
+  const { setLoading } = useLoadingModal();
   const [text, setText] = React.useState<string>(route.params?.text || '');
   const [fromTo, setFromTo] = React.useState<string[]>(['vi', 'en']);
   const [result, setResult] = React.useState<string>('');
@@ -129,7 +129,7 @@ const TranslateText = ({navigation, route}: Props) => {
               gap: 10,
             }}>
             <TouchableOpacity
-              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               onPress={() => {
                 navigation.goBack();
               }}>
@@ -148,7 +148,7 @@ const TranslateText = ({navigation, route}: Props) => {
         </View>
 
         <ScrollView contentContainerStyle={styles.bodyContainer}>
-          <Shadow
+          {/* <Shadow
             sides={{bottom: true, top: false, end: false, start: false}}
             style={{
               borderRadius: 200,
@@ -188,12 +188,12 @@ const TranslateText = ({navigation, route}: Props) => {
                 {MAP[fromTo[1]]}
               </Text>
             </View>
-          </Shadow>
+          </Shadow> */}
 
-          <Card style={{padding: 10}}>
-            <View style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}>
+          <Card style={{ padding: 10 }}>
+            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
               <TouchableHighlight
-                hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 underlayColor={COLORS.BACKGROUND_PRIMARY_DARK}
                 onPress={speakFromText}
                 style={{
@@ -206,9 +206,9 @@ const TranslateText = ({navigation, route}: Props) => {
                 }}>
                 <IoIcon name="volume-high" size={15} color={COLORS.TEXT_WHITE} />
               </TouchableHighlight>
-              <Text style={{marginRight: 'auto', color: COLORS.TEXT_GRAY}}>{MAP[fromTo[0]]}</Text>
+              <Text style={{ marginRight: 'auto', color: COLORS.TEXT_GRAY }}>{MAP[fromTo[0]]}</Text>
               <TouchableOpacity
-                hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 onPress={() => {
                   setText('');
                   setResult('');
@@ -228,27 +228,27 @@ const TranslateText = ({navigation, route}: Props) => {
           </Card>
 
           {/* 2 Translate Buttons */}
-          <View style={{flexDirection: 'row', alignItems: 'center', gap: 10, marginVertical: 10}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginVertical: 10 }}>
             <TouchableHighlight
               onPress={enToVi}
               underlayColor={COLORS.BACKGROUND_PRIMARY_DARK}
               style={styles.translateButton}>
-              <Text style={{fontSize: 16, color: COLORS.TEXT_WHITE, fontWeight: '500'}}>Anh - Việt</Text>
+              <Text style={{ fontSize: 16, color: COLORS.TEXT_WHITE, fontWeight: '500' }}>Anh - Việt</Text>
             </TouchableHighlight>
             <TouchableHighlight
               onPress={viToEn}
               underlayColor={COLORS.BACKGROUND_PRIMARY_DARK}
               style={styles.translateButton}>
-              <Text style={{fontSize: 16, color: COLORS.TEXT_WHITE, fontWeight: '500'}}>Việt - Anh</Text>
+              <Text style={{ fontSize: 16, color: COLORS.TEXT_WHITE, fontWeight: '500' }}>Việt - Anh</Text>
             </TouchableHighlight>
           </View>
 
           {/* Result Card */}
           {result && (
-            <Card style={{padding: 10, gap: 10}}>
-              <View style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}>
+            <Card style={{ padding: 10, gap: 10 }}>
+              <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                 <TouchableHighlight
-                  hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   underlayColor={COLORS.BACKGROUND_PRIMARY_DARK}
                   onPress={speakToText}
                   style={{
@@ -261,9 +261,9 @@ const TranslateText = ({navigation, route}: Props) => {
                   }}>
                   <IoIcon name="volume-high" size={15} color={COLORS.TEXT_WHITE} />
                 </TouchableHighlight>
-                <Text style={{marginRight: 'auto', color: COLORS.TEXT_GRAY}}>{MAP[fromTo[1]]}</Text>
+                <Text style={{ marginRight: 'auto', color: COLORS.TEXT_GRAY }}>{MAP[fromTo[1]]}</Text>
                 <TouchableOpacity
-                  hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   onPress={() => {
                     Clipboard.setString(result);
                     ToastAndroid.show('Đã sao chép', ToastAndroid.SHORT);
@@ -271,7 +271,7 @@ const TranslateText = ({navigation, route}: Props) => {
                   <OctIcon name="copy" size={20} color={COLORS.TEXT_GRAY} />
                 </TouchableOpacity>
               </View>
-              <Text style={{color: COLORS.TEXT_BLACK}}>{result}</Text>
+              <Text style={{ color: COLORS.TEXT_BLACK }}>{result}</Text>
             </Card>
           )}
         </ScrollView>
